@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <!-- 배열 매핑 -->
+    <ul id="array-rendering">
+      <li v-for="item in items">{{ item.msg }}</li>
+    </ul>
+    <!-- 필터링 된 정보 표시 -->
+    <ul id="array-filtering">
+      <li v-for="n in calcNumbers">{{ n }}</li>
+    </ul>
+
+    <script>
+      // 배열 매핑
+      const dataStorage = {
+        items: [
+          {
+            msg: '1',
+          },
+          {
+            msg: '2',
+          },
+        ],
+      };
+
+      dataStorage.items.push({ msg: '3' });
+
+      Vue.createApp({
+        data() {
+          return dataStorage;
+        },
+      }).mount('#array-rendering');
+
+      // 필터링 정보 표시
+      Vue.createApp({
+        data() {
+          return {
+            numbers: [1, 3, 2, 4],
+          };
+        },
+        computed: {
+          calcNumbers() {
+            return this.numbers.sort();
+          },
+        },
+      }).mount('#array-filtering');
+    </script>
+  </body>
+</html>

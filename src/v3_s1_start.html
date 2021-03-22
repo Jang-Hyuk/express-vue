@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="todo-list-app">
+      TodoList
+      <ol>
+        <todo-item
+          v-for="item in groceryList"
+          v-bind:todo="item"
+          v-bind:key="item.id"
+          >{{ item.id }}</todo-item
+        >
+      </ol>
+    </div>
+
+    <div id="bind">{{ data }}</div>
+
+    <div id="yes-no">
+      <div>질문을 입력하세요. yes/no</div>
+      <div>
+        <input
+          type="text"
+          v-model="question"
+          placeholder="질문을 입력하세요."
+        />
+      </div>
+      <div>결과입니다. <span>{{ result }}</span></div>
+    </div>
+
+    <div>================</div>
+
+    <div id="temp-app">
+      <my-component class="baz">템플릿 테스트</my-component>
+    </div>
+
+    <!-- 폼 - 체크박스 -->
+    <div id="v-model-multiple-checkboxes">
+      <input type="checkbox" id="jack" value="Jack" v-model="checkedNames" />
+      <label for="jack">Jack</label>
+      <input type="checkbox" id="john" value="John" v-model="checkedNames" />
+      <label for="john">John</label>
+      <input type="checkbox" id="mike" value="Mike" v-model="checkedNames" />
+      <label for="mike">Mike</label>
+      <br />
+      <span>Checked names: {{ checkedNames }}</span>
+    </div>
+    <!-- 폼 - 라디오 -->
+    <div id="v-model-radiobutton">
+      <input type="radio" id="one" value="One" v-model="picked" />
+      <label for="one">One</label>
+      <br />
+      <input type="radio" id="two" value="Two" v-model="picked" />
+      <label for="two">Two</label>
+      <br />
+      <span>Picked: {{ picked }}</span>
+    </div>
+    <div id="form-bind">
+      <input
+        id="checkbox-test1"
+        type="checkbox"
+        value="one"
+        true-value="yes"
+        false-value="no"
+        v-model="toggleResult"
+      />
+      <label for="checkbox-test1">Check1</label>
+      <input
+        id="checkbox-test2"
+        type="checkbox"
+        value="two"
+        true-value="yes"
+        false-value="no"
+        v-model="toggleResult"
+      />
+      <label for="checkbox-test2">Check2</label>
+      결과 -> {{ toggleResult }}
+    </div>
+    <div>================</div>
+    <!-- Toy Calc -->
+    <div id="toy-calc">
+      <input type="number" v-model="first" id="first-number" />
+      <!-- 동적 부여 -->
+      <select id="calc-select">
+        <toy-option
+          v-for="option in selectOptions"
+          :value="option"
+        ></toy-option>
+      </select>
+      <input type="number" v-model="last" id="last-number" />
+      ---> <span id="calc-number">{{ calcValue }}</span>
+    </div>
+  </body>
+
+  <script>
+    const TodoList = {
+      data() {
+        return {
+          idx: 0,
+          groceryList: [
+            {
+              id: 0,
+              text: 'First Txt',
+              msg: 'One',
+            },
+            {
+              id: 1,
+              text: 'Second Txt',
+              msg: 'Two',
+            },
+            {
+              id: 2,
+              text: 'Third Txt',
+              msg: 'Three',
+            },
+          ],
+        };
+      },
+    };
+
+    const app = Vue.createApp(TodoList);
+
+    app.component('todo-item', {
+      props: ['todo'],
+      template: `<li>{{ todo.text }}</li>`,
+    });
+    app.mount('#todo-list-app');
+
+    // 데이터 바인딩
+    Vue.createApp({
+      data() {
+        return {
+          data: 'Hello World',
+        };
+      },
+    }).mount('#bind');
+  </script>
+
+  <script>
+    const questionData = {
+      data() {
+        return {
+          count: 0,
+          question: '',
+          result: '',
+        };
+      },
+      computed: {
+        computeResult() {
+          if (this.question.indexOf('?') === -1) {
+            return '응답에는 ?가 필요합니다.';
+          }
+          return '요청 중';
+        },
+      },
+      watch: {
+        question(newQuestion, oldQuestion) {
+          if (newQuestion.indexOf('?') > -1) {
+            this.debouncedGetAnswer();
+          }
+          this.result = '응답에는 ?가 필요합니다.';
+        },
+      },
+      methods: {
+        getAnswer() {
+          console.log(++this.count);
+          this.result = '생각 중';
+
+          axios
+            .get('https://yesno.wtf/api')
+            .then(result => {
+              this.result = result.data.answer;
+            })
+            .catch(err => {
+              this.result = err.message;
+            });
+        },
+      },
+    };
+
+    // 질문 입력에 대한 yesorno 요청
+    Vue.createApp(questionData).mount('#yes-no');
+    // .created(function () {
+    //   this.debouncedGetAnswer = _.debouce(this.getAnswer, 500);
+    // });
+
+    // 응답 결과 출력
+  </script>
+
+  <script>
+    // const templateApp = Vue.createApp();
+    // templateApp.component('my-component', {
+    //   template: `
+    //   <p :class="$attr.class">Hi</p>
+    //     <span>This is a child Component</span>
+    //   `,
+    // });
+
+    // Vue.createApp({}).mount('#temp-app');
+  </script>
+
+  <!-- 폼 -->
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          checkedNames: [],
+        };
+      },
+    }).mount('#v-model-multiple-checkboxes');
+
+    Vue.createApp({
+      data() {
+        return {
+          picked: '',
+        };
+      },
+    }).mount('#v-model-radiobutton');
+
+    Vue.createApp({
+      data() {
+        return {
+          toggleResult: [],
+        };
+      },
+    }).mount('#form-bind');
+  </script>
+
+  <!-- Toy Calc -->
+  <script>
+    // 템플릿을 이용하여 컴포넌트를 생성
+    const toyCalcData = {
+      data() {
+        return {
+          first: 1,
+          last: 2,
+          selectOptions: {
+            sum: 'Sum',
+            subtract: 'Subtract',
+            multiply: 'multiply',
+          },
+        };
+      },
+      computed: {
+        calcValue() {
+          return Number(this.first) + Number(this.last);
+        },
+      },
+    };
+
+    const toyCalcApp = Vue.createApp(toyCalcData);
+
+    toyCalcApp.mount('#toy-calc');
+
+    // select 컴포넌트 생성
+
+    // selectOptions에 따라 반복하여 돔 구성
+
+    // 셀렉트 값 목록을 기반으로 셀렉트를 생성
+
+    // first 및 last 가 입력되면 셀렉트 값에 따라 계산하여 calc에 반환
+  </script>
+</html>

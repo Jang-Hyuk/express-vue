@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Step 3</title>
+    <!-- 개발버전, 도움되는 콘솔 경고를 포함. -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- 객체 구문 -->
+    <div
+      id="object"
+      class="static"
+      :class="{static: isStatic, active: isActive, 'text-danger': hasError}"
+    >
+      <div id="sub-object" :class="subObject"></div>
+      <div id="computed-object" :class="computedObject"></div>
+    </div>
+  </body>
+
+  <script>
+    // 객체 구문 렌더링 >> 변경되면 Dom 업데이트
+    const objectApp = new Vue({
+      el: '#object',
+      data: {
+        isStatic: false,
+        isActive: 1,
+        hasError: true,
+        error: new Error('wtf'),
+        subObject: {
+          isStatic: true,
+          isActive: 0,
+          'text-danger': true,
+        },
+      },
+      computed: {
+        computedObject() {
+          return {
+            active: !!this.isActive,
+            'text-danger': this.error && this.error.type === 'fatal',
+          };
+        },
+      },
+    });
+  </script>
+</html>

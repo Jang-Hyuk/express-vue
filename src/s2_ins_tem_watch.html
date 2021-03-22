@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Step 2: Instance</title>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+    <!-- 개발버전, 도움되는 콘솔 경고를 포함. -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+
+  <body>
+    Step2
+    <div id="example"></div>
+
+    <!-- 원시 HTML >> v-html -->
+    <div id="mustaches-1">
+      <p>Using mustaches {{rawHtml + 1}}</p>
+      <p>Using v-html directive <span v-html="rawHtml"></span></p>
+    </div>
+
+    <!-- 속성 >> v-bind -->
+    <div id="mustaches-2" v-bind:id="dynamicId">
+      dynamicId
+      <button v-bind:disabled="isButtonDisabled">Button</button>
+    </div>
+
+    <!-- 자바스크립트 표현식 사용 -->
+    <div id="javascript">
+      <!-- 템플릿 리터럴 -->
+      <p
+        v-bind:id="'bind-' + id"
+        v-bind:literal="'bind-' + `${literal}`"
+        v-bind:lodash="_.map('key').join('')"
+      >
+        {{ `exp = ${exp}` }}
+      </p>
+    </div>
+
+    <!-- 동적 전달 인자 -->
+    <div id="dynamicAttr">
+      <p v-bind:[`bind-${bar}`]="value"></p>
+    </div>
+
+    <!-- computed -->
+    <div id="computedId">
+      <p>원본 메시지:"{{ message }}"</p>
+      <p>역순으로 표시한 메시지: "{{ reverseMessage }}"</p>
+    </div>
+
+    <!-- compute -->
+    <div id="comWatch">
+      <input type="text" v-model="firstName" value="jang" />
+      <input type="text" v-model="lastName" value="hyuk" />
+      <input type="text" v-model="fullName" value="jang hyuk" />
+    </div>
+    <!-- private -->
+    <div id="watch-example">
+      <p>yes/no 질문을 물어보세요</p>
+      <input type="text" v-model="question" />
+      <p>{{ answer }}</p>
+    </div>
+  </body>
+
+  <!-- Instance -->
+  <script>
+    const data = {
+      a: 1,
+    };
+
+    const app = new Vue({
+      el: '#example',
+      data: data,
+    });
+
+    console.log('동일 체크', app.a === data.a);
+    console.log('동일 체크 $', app.$data === data);
+    console.log(
+      '동일 체크 Dom',
+      document.getElementById('example') === app.$el,
+    );
+
+    data.a = 'prevDefineCall';
+
+    // 1회에 한해서 호출됨
+    app.$watch('a', function (newVal, oldVal) {
+      // vm.a 가 변경되면 호출
+      console.log('watch', newVal, oldVal);
+    });
+
+    data.a = 'nextDefineCall';
+    data.a = 'goDefineCall';
+  </script>
+
+  <!-- Template -->
+  <script>
+    // v-html
+    const mustachesHtml = new Vue({
+      el: '#mustaches-1',
+      data: {
+        rawHtml: '<span style="color: red">This should be red.</span>',
+        testId: 'tester',
+      },
+    });
+    // v-bind
+    const mustachesAttr = new Vue({
+      el: '#mustaches-2',
+      data: {
+        dynamicId: 'testAttr',
+        // v-bind:disabled 사용 시 null, undefined, false 일 경우 disabled 렌더링
+        isButtonDisabled: 0,
+      },
+    });
+    // javascript
+    const appJs = new Vue({
+      el: '#javascript',
+      data: {
+        id: 'successBind',
+        literal: 'successBind',
+        exp: 'changeExp',
+      },
+    });
+    // 동적 전달 인자
+    const appDynamic = new Vue({
+      el: '#dynamicAttr',
+      data: {
+        bar: 'dynamic-attr',
+        value: '동적 밸류',
+      },
+    });
+
+    // 약어
+    // v-bind: -> :, v-on: -> @
+  </script>
+
+  <!-- computed & watch -->
+  <script>
+    const computeApp = new Vue({
+      el: '#computedId',
+      data: {
+        message: 'Message',
+      },
+      computed: {
+        reverseMessage() {
+          return this.message.split('').reverse().join('');
+        },
+      },
+    });
+
+    // 선언형 & 명령형
+    const comWatchApp = new Vue({
+      el: '#comWatch',
+      data: {
+        firstName: 'first',
+        lastName: 'last',
+      },
+      methods: {},
+      computed: {
+        fullName: {
+          get() {
+            return `${this.firstName}-${this.lastName}`;
+          },
+          set(newValue) {
+            const names = newValue.split('-');
+            this.firstName = names[0];
+            this.lastName = names[names.length - 1];
+          },
+        },
+      },
+      watch: {
+        fullName() {
+          return 'hi';
+        },
+      },
+    });
+  </script>
+
+  <!-- 이미 Ajax 라이브러리의 풍부한 생태계와 범용 유틸리티 메소드 컬렉션이 있기 때문에, -->
+  <!-- Vue 코어는 다시 만들지 않아 작게 유지됩니다. -->
+  <!-- 이것은 이미 익숙한 것을 선택할 수 있는 자유를 줍니다. -->
+  <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+  <!-- watch -->
+  <script>
+    // watch
+    const watchApp = new Vue({
+      el: '#watch-example',
+      data: {
+        question: '',
+        answer: '질문을 하기 전에는 대답 불가',
+      },
+      watch: {
+        question(newQuestion) {
+          this.answer = '입력 대기 중';
+          this.debouncedGetAnswer();
+        },
+      },
+      // LifeCycle Step 1
+      created() {
+        this.debouncedGetAnswer = _.debounce(this.getAnswer, 500);
+      },
+      methods: {
+        getAnswer() {
+          if (this.question.indexOf('?') === -1) {
+            this.answer = '질문에는 일반적으로 물음표가 포함됩니다.';
+            return;
+          }
+          this.answer = '생각 중';
+
+          axios
+            .get('https://yesno.wtf/api?')
+            .then(response => {
+              this.answer = _.capitalize(response.data.answer);
+            })
+            .catch(error => {
+              this.answer = '에러! API 요청에 오류가 있습니다.' + error;
+            });
+        },
+      },
+    });
+  </script>
+</html>

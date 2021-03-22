@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="v-basic-component">
+      <ul>
+        <my-component v-for="item in items" :title="item.title"></my-component>
+        <!-- <template v-for="(item, index) in items">
+          <li>{{ item.title }}</li>
+          <li class="divider" role="presentation">{{ index }}</li>
+        </template> -->
+      </ul>
+    </div>
+
+    <!-- <template id="my-component">
+      <my-component
+        v-for="(item, index) in items"
+        :index="index"
+        :item="item"
+        :id="item.id"
+      ></my-component>
+    </template> -->
+
+    <script>
+      const dataStorage = {
+        newTodoText: '',
+        prevTodoText: '',
+        items: [
+          {
+            id: 0,
+            title: '투두 만들기',
+          },
+          {
+            id: 1,
+            title: 'Vue.js 필수 요소 학습',
+          },
+          {
+            id: 2,
+            title: 'Vue.js 컴포넌트 돌아보기',
+          },
+        ],
+      };
+
+      const vmTodo = Vue.createApp({
+        data() {
+          return dataStorage;
+        },
+      });
+
+      vmTodo.component('my-component', {
+        props: ['title'],
+        template: `
+          {{ title }}
+          <button @click="$emit('remove')"></button>
+          <p>{{ item.id }}</p>
+        `,
+      });
+
+      vmTodo.mount('#v-basic-component');
+    </script>
+  </body>
+</html>
