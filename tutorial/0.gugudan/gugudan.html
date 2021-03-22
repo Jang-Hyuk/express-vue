@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <script src="https://unpkg.com/vue@next"></script>
+  </head>
+  <body>
+    <div id="gugudan">
+      <form action="">
+        <div>{{ firstNumber }} 곱하기 {{ lastNumber }} 는 ?</div>
+        <div>
+          <input
+            type="number"
+            v-model="submitNumber"
+            placeholder="입력하세요."
+            id="gugudanInput"
+            ref="answer"
+          />
+          <button type="submit" @click="submitForm">제출</button>
+        </div>
+        <div>
+          결과: {{ resultNumber }} {{ firstNumber + lastNumber }}
+          <input type="button" @click="reset" value="다시 하기" />
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // 처음에는 넘버 2개 자동 생성 ( 1 ~ 9)
+      const vm = Vue.createApp({
+        data() {
+          return {
+            firstNumber: Math.ceil(Math.random() * 9),
+            lastNumber: Math.ceil(Math.random() * 9),
+            submitNumber: '',
+            resultNumber: '',
+          };
+        },
+        methods: {
+          getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
+          },
+          submitForm(e) {
+            e.preventDefault();
+            this.resultNumber =
+              this.firstNumber * this.lastNumber === Number(this.submitNumber)
+                ? '정답'
+                : '땡';
+
+            if (this.firstNumber * this.lastNumber === Number(this.submitNumber)) {
+              this.resultNumber = '정답';
+
+              this.firstNumber = Math.ceil(Math.random() * 9);
+              this.lastNumber = Math.ceil(Math.random() * 9);
+            } else {
+              this.resultNumber = '땡';
+            }
+
+            this.submitNumber = '';
+            this.$refs.answer.focus();
+          },
+          reset() {
+            this.firstNumber = Math.ceil(Math.random() * 9);
+            this.lastNumber = Math.ceil(Math.random() * 9);
+            this.submitNumber = '';
+          },
+        },
+      }).mount('#gugudan');
+
+      // 입력 버튼이 눌러졌을 경우 결과 계산
+
+      // 다시 하기가 눌러졌을 경우 처음으로
+    </script>
+  </body>
+</html>
