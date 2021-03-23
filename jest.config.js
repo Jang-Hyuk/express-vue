@@ -25,6 +25,8 @@ module.exports = {
   },
   // Jest Snapshot 테스트에 필요한 모듈을 지정합니다.
   snapshotSerializers: ['jest-serializer-vue'],
+  // collectCoverage: true,
+  collectCoverageFrom: ['**/*.{js,vue}', '!**/node_modules/**'],
 };
 
 // package.json
