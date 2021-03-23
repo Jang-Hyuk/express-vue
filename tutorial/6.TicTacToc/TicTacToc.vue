@@ -1,5 +1,5 @@
 <template>
-  <table-component></table-component>
+  <table-component :table-data="tableData"></table-component>
 </template>
 
 <script>
@@ -9,9 +9,28 @@ export default {
   components: {
     TableComponent,
   },
-  data() {},
+  data() {
+    return {
+      tableData: [
+        ['', '', ''],
+        ['', '', ''],
+        ['', '', ''],
+      ],
+      turn: 'O',
+    };
+  },
   methods: {},
 };
 </script>
 
-<style></style>
+<style>
+table {
+  border-collapse: collapse;
+}
+td {
+  border: 1px solid black;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+}
+</style>

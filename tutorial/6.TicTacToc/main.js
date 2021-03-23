@@ -1,5 +1,5 @@
 import Vue from 'vue';
 
-import LottoGenerator from './LottoGenerator.vue';
+import TicTacToc from './TicTacToc.vue';
 
-new Vue(LottoGenerator).$mount('#root');
+new Vue(TicTacToc).$mount('#root');

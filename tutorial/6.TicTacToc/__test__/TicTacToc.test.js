@@ -55,7 +55,7 @@ describe('Td Component Jest', () => {
     /** ************
      *  Create
      * ************ */
-    wrapper = shallowMount(TrComponent, {
+    wrapper = mount(TrComponent, {
       propsData: {
         rowIndex: 1,
         squareCount: 1,

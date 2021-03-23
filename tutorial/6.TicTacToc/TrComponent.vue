@@ -1,27 +1,26 @@
 <template>
-  <td-component
-    :v-for="(colsIndex, idx) in colsIndexList"
-    :rowIndex="rowIndex"
-    :colsIndex="colsIndex"
-    :key="idx"
-  ></td-component>
+  <!-- <td-component
+    :v-for="(cellData, index) in rowData"
+    :cell-data="cellData"
+    :cell-index="index"
+    :row-index="rowIndex"
+  ></td-component> -->
+  <div></div>
 </template>
 
 <script>
-import TdComponent from './TdComponent.vue';
+// import TdComponent from './TdComponent.vue';
 
 export default {
   props: {
+    rowData: Array,
     rowIndex: Number,
-    squareCount: Number,
   },
-  components: {
-    TdComponent,
-  },
+  // components: {
+  //   TdComponent,
+  // },
   data() {
-    return {
-      colsIndexList: [],
-    };
+    return {};
   },
   methods: {
     // createTdComponent(rowNumber, rowCount) {
@@ -30,14 +29,14 @@ export default {
     // },
   },
   beforeCreate() {
-    console.log('beforeCreate', this.colsIndexList);
+    console.log('beforeCreate');
   },
   created() {
-    console.log('created', this.colsIndexList);
+    console.log('created');
     // this.colsIndexList = new Array(this.squareCount).fill(0).map(v => v + 1);
   },
   mounted() {
-    console.log('mounted', this.squareCount);
+    console.log('mounted');
   },
 };
 </script>

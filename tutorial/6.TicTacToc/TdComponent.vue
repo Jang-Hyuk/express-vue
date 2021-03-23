@@ -1,38 +1,30 @@
 <template>
-  <td>{{ choiceStatus }}</td>
+  <td>{{ cellData }}</td>
 </template>
 
 <script>
 export default {
   props: {
-    rowsIndex: Number,
-    colsIndex: Number,
+    cellData: Number,
+    cellIndex: Number,
+    rowIndex: Number,
   },
   data() {
     return {
       isUserChoice: null,
     };
   },
-  computed: {
-    id() {
-      return `${this.rowsIndex + 1}_${this.colsIndex + 1}`;
-    },
-    choiceStatus() {
-      return this.isUserChoice ? 'O' : 'X';
-    },
-  },
-  methods: {
-    onClickChoice(isUserClick = true) {
-      this.isUserChoice = isUserClick;
 
-      return this.isUserChoice;
+  methods: {
+    onClickTd() {
+      console.log(this.$root.$data);
     },
   },
   created() {
-    console.log('created', this.rowsIndex);
+    console.log('created');
   },
   mounted() {
-    console.log('mounted', this.rowsIndex);
+    console.log('mounted');
   },
 };
 </script>
