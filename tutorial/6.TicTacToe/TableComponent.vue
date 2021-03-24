@@ -1,10 +1,12 @@
 <template>
-  <tr-component
-    :v-for="(rowData, index) in tableData"
-    :row-data="rowData"
-    :row-index="index"
-    :key="index"
-  ></tr-component>
+  <div>
+    <tr-component
+      v-for="(rowData, index) in tableData"
+      :key="index"
+      :row-data="rowData"
+      :row-index="index"
+    ></tr-component>
+  </div>
 </template>
 
 <script>
@@ -21,6 +23,7 @@ export default {
     return {};
   },
   methods: {},
+  mounted() {},
 };
 </script>
 
