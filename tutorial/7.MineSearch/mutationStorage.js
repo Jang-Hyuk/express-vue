@@ -1,0 +1,12 @@
+export const ON_CHANGE_LEVEL = 'ON_CHANGE_LEVEL';
+export const START_GAME = 'START_GAME';
+export const CLEAR_GAME = 'CLEAR_GAME';
+export const FAIL_GAME = 'FAIL_GAME';
+export const OPEN_CELL = 'OPEN_CELL';
+export const OPEN_CELL_NORMAL = 'OPEN_CELL_NORMAL';
+export const OPEN_CELL_MINE = 'OPEN_CELL_MINE';
+export const OPEN_CELL_CHAIN = 'OPEN_CELL_CHAIN';
+export const RCLICK_CELL = 'RCLICK_CELL';
+export const FLAG_CELL_QUESTION = 'FLAG_CELL_QUESTION';
+export const FLAG_CELL_MINE = 'FLAG_CELL_MINE';
+export const FLAG_CELL_CLEAR = 'FLAG_CELL_CLEAR';
